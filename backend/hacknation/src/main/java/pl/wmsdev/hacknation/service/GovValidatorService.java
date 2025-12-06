@@ -7,6 +7,7 @@ import pl.wmsdev.hacknation.entity.HashEntry;
 import pl.wmsdev.hacknation.entity.PageData;
 import pl.wmsdev.hacknation.repository.HashRepository;
 import pl.wmsdev.hacknation.values.CheckResult;
+import pl.wmsdev.hacknation.values.PageValidation.*;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.net.InetAddress;
@@ -24,7 +25,7 @@ public class GovValidatorService {
     private final HashRepository hashRepository;
 
     public CheckResponse validatePage(PageData pageData) {
-        List<String> reasons = new ArrayList<>();
+        List<PageValidationError> errors = new ArrayList<>();
         boolean isValid = true;
         UUID validationId = UUID.randomUUID();
 
@@ -33,18 +34,18 @@ public class GovValidatorService {
 
             if (!GOV_PL_PATTERN.matcher(url.getHost()).matches()) {
                 isValid = false;
-                reasons.add("Host is not a valid gov.pl domain.");
+                errors.add(new FraudulentTldError());
             }
 
             try {
                 InetAddress address = InetAddress.getByName(url.getHost());
                 if (!address.getHostAddress().equals(pageData.serverIp())) {
                     isValid = false;
-                    reasons.add("DNS resolution check failed. IP address does not match. It should be: " + address.getHostAddress());
+                    errors.add(new MismatchedDnsResolutionError(pageData.serverIp(), address.getHostAddress()));
                 }
             } catch (Exception e) {
                 isValid = false;
-                reasons.add("DNS resolution failed: " + e.getMessage());
+                errors.add(new DnsResolutionError(e.getMessage()));
             }
 
             if (url.getProtocol().equalsIgnoreCase("https")) {
@@ -55,16 +56,16 @@ public class GovValidatorService {
                     conn.disconnect();
                 } catch (Exception e) {
                     isValid = false;
-                    reasons.add("SSL certificate validation failed: " + e.getMessage());
+                    errors.add(new SslError(e.getMessage()));
                 }
             } else {
                 isValid = false;
-                reasons.add("URL is not HTTPS.");
+                errors.add(new NoHttpsError());
             }
 
         } catch (Exception e) {
             isValid = false;
-            reasons.add("Invalid URL: " + e.getMessage());
+            errors.add(new MalformedUrlError(e.getMessage()));
         }
 
         hashRepository.save(HashEntry.builder()
