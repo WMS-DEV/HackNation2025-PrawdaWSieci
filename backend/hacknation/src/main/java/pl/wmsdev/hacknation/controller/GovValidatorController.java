@@ -1,5 +1,6 @@
 package pl.wmsdev.hacknation.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +22,7 @@ import java.util.UUID;
 public class GovValidatorController {
     private final GovValidatorService govValidatorService;
     @PostMapping
-    public ResponseEntity<CheckResponse> startValidation(@RequestBody PageData pageData) {
+    public ResponseEntity<CheckResponse> startValidation(@Valid @RequestBody PageData pageData) {
         return ResponseEntity.ok(govValidatorService.validatePage(pageData));
     }
 
