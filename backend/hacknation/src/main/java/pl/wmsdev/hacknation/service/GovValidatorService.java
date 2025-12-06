@@ -8,10 +8,12 @@ import pl.wmsdev.hacknation.entity.PageData;
 import pl.wmsdev.hacknation.repository.HashRepository;
 import pl.wmsdev.hacknation.values.CheckResult;
 import pl.wmsdev.hacknation.values.PageValidation.*;
+import pl.wmsdev.hacknation.values.ValidationResult;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.net.InetAddress;
 import java.net.URL;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -72,10 +74,16 @@ public class GovValidatorService {
                 .id(validationId)
                 .originalUrl(pageData.url())
                 .serverIp(pageData.serverIp())
-                .timestamp(pageData.timestamp())
+                .timestamp(Instant.now())
                 .result(isValid ? CheckResult.VALID : CheckResult.INVALID)
                 .build());
 
         return new CheckResponse(validationId);
+    }
+
+    public ValidationResult getValidationResult(UUID validationId) {
+        return hashRepository.findById(validationId)
+                .map(hashEntry -> new ValidationResult(hashEntry.getResult()))
+                .orElseThrow(() -> new RuntimeException("Validation result not found for ID: " + validationId));
     }
 }
