@@ -1,25 +1,18 @@
 services:
-  #  client:
-  #    container_name: client
-  #    restart: always
-  #    build:
-  #      context: ./frontend
-  #      dockerfile: Dockerfile
-  #    ports:
-  #      - "${FRONTEND_PORT}:3000"
-  #    develop:
-  #      watch:
-  #        - action: rebuild
-  #          path: ./frontend
-  fake-mobywatel:
+  client:
+    container_name: client
+    restart: always
     build:
-      context: "./fake-mobywatel"
-    volumes:
-      - ./fake-mobywatel:/app
-      - /app/node_modules
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      - VITE_API_URL=http://localhost:8080
     ports:
-      - "5173:5173"
-    command: npm run dev
+      - "3000:3000"
+    develop:
+      watch:
+        - action: rebuild
+          path: ./frontend
   service:
     image: ghcr.io/wms-dev/hacknation/prawda-w-sieci
     container_name: backend
