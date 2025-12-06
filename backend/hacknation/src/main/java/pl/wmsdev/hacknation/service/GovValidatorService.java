@@ -17,8 +17,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -32,16 +31,16 @@ public class GovValidatorService {
     public CheckResponse validatePage(PageData pageData) {
         UUID validationId = UUID.randomUUID();
 
-        PageValidationError encounteredError = null;
+        Optional<PageValidationError> encounteredError = Optional.empty();
         try {
             var url = validateUrl(pageData.url());
             validateTld(url);
-            var ipFromServer = validateDns(url);
+            var ipFromServer = resolveDns(url);
             validateIp(ipFromServer, pageData.serverIp());
             validateHttps(url);
             validateSsl(url);
         } catch (PageValidationError error) {
-            encounteredError = error;
+            encounteredError = Optional.of(error);
         }
 
         hashRepository.save(HashEntry.builder()
@@ -49,11 +48,10 @@ public class GovValidatorService {
                 .originalUrl(pageData.url())
                 .serverIp(pageData.serverIp())
                 .timestamp(Instant.now())
-                .result(encounteredError == null ? CheckResult.VALID : CheckResult.INVALID)
+                .result(encounteredError.isEmpty() ? CheckResult.VALID : CheckResult.INVALID)
                 .build());
 
         return new CheckResponse(validationId);
-
     }
 
     private URL validateUrl(String url) throws MalformedUrlError {
@@ -76,7 +74,7 @@ public class GovValidatorService {
        }
     }
 
-    private InetAddress validateDns(URL url) throws DnsResolutionError {
+    private InetAddress resolveDns(URL url) throws DnsResolutionError {
         try {
             return InetAddress.getByName(url.getHost());
         } catch (UnknownHostException e) {
