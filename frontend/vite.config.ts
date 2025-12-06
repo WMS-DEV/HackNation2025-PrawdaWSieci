@@ -6,8 +6,10 @@ import basicSsl from "@vitejs/plugin-basic-ssl";
 
 export default defineConfig({
   plugins: [react(), tailwindcss(), svgr(), basicSsl()],
+  envDir: "../",
   server: {
     host: true,
+    port: 3000,
     watch: {
       usePolling: true,
     },
