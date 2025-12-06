@@ -13,18 +13,17 @@ services:
 #          path: ./frontend
 
   service:
-    image: ghcr.io/wms-dev/hacknation/prawda-w-sieci
     container_name: backend
     restart: unless-stopped
     build:
       context: ./backend/hacknation
       dockerfile: Dockerfile
     environment:
-        - SERVICE_DB_URL=jdbc:postgresql://postgresdb:5432/hacknation
-        - SERVICE_DB_LOGIN=postgres
-        - SERVICE_DB_PASSWORD=postgres
+        - SERVICE_DB_URL=${SERVICE_DB_URL}
+        - SERVICE_DB_LOGIN=${SERVICE_DB_LOGIN}
+        - SERVICE_DB_PASSWORD=${SERVICE_DB_PASSWORD}
     ports:
-      - "8080:8080"
+      - "${SERVICE_PORT}:8080"
     depends_on:
       postgresdb:
         condition: service_healthy
