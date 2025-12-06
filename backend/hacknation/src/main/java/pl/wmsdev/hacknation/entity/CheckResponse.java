@@ -1,4 +1,6 @@
 package pl.wmsdev.hacknation.entity;
 
-public record CheckResponse(String hash) {
+import java.util.List;
+
+public record CheckResponse(boolean isValid, List<String> reasons) {
 }
