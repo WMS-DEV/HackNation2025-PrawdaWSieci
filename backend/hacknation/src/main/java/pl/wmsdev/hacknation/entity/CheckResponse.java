@@ -1,6 +1,6 @@
 package pl.wmsdev.hacknation.entity;
 
-import java.util.List;
+import java.util.UUID;
 
-public record CheckResponse(boolean isValid, List<String> reasons) {
+public record CheckResponse(UUID validationId) {
 }
