@@ -1,0 +1,12 @@
+version: "3.7"
+
+services:
+  fake-mobywatel:
+    build:
+      context: "./fake-mobywatel"
+    volumes:
+      - ./fake-mobywatel:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    command: npm run dev

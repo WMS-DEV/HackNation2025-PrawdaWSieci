@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import ScanQRIcon from "../assets/ScanQRIcon.svg?react";
 import ShowQRIcon from "../assets/ShowQRIcon.svg?react";
 import RightArrowIcon from "../assets/RightArrowIcon.svg?react";
@@ -7,8 +8,21 @@ interface QRCodeOptionProps {
 }
 
 export default function QRCodeOption({ scanOrShow }: QRCodeOptionProps) {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (scanOrShow === "show") {
+      navigate("/show-qr");
+    } else {
+      navigate("/scan-qr");
+    }
+  };
+
   return (
-    <button className="w-full h-20 rounded-2xl bg-[var(--primary-color)] p-2 transition flex gap-x-2 justify-around items-center shadow-md transition hover:bg-amber-800">
+    <button
+      onClick={handleClick}
+      className="w-full h-20 rounded-2xl bg-[var(--primary-color)] p-2 transition flex gap-x-2 justify-around items-center shadow-md transition hover:bg-amber-800"
+    >
       <div>
         {scanOrShow === "scan" ? (
           <ScanQRIcon className="w-10" />
