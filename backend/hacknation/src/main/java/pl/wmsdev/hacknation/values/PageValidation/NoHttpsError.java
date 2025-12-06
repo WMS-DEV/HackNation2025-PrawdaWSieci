@@ -1,6 +1,6 @@
 package pl.wmsdev.hacknation.values.PageValidation;
 
-public record NoHttpsError() implements PageValidationError {
+public final class NoHttpsError extends PageValidationError {
     @Override
     public String getDescription() {
         return "URL is not HTTPS";

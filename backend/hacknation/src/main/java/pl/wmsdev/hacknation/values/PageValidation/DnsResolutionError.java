@@ -1,6 +1,14 @@
 package pl.wmsdev.hacknation.values.PageValidation;
 
-public record DnsResolutionError(String message) implements PageValidationError {
+import java.util.Objects;
+
+public final class DnsResolutionError extends PageValidationError {
+    private final String message;
+
+    public DnsResolutionError(String message) {
+        this.message = message;
+    }
+
     @Override
     public String getDescription() {
         return "DNS resolution failed: " + message;

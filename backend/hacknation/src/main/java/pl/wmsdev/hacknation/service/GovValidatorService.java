@@ -11,8 +11,11 @@ import pl.wmsdev.hacknation.values.PageValidation.*;
 import pl.wmsdev.hacknation.values.ValidationResult;
 
 import javax.net.ssl.HttpsURLConnection;
+import java.io.IOException;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,47 +30,18 @@ public class GovValidatorService {
     private final HashRepository hashRepository;
 
     public CheckResponse validatePage(PageData pageData) {
-        List<PageValidationError> errors = new ArrayList<>();
-        boolean isValid = true;
         UUID validationId = UUID.randomUUID();
 
+        PageValidationError encounteredError = null;
         try {
-            URL url = new URL(pageData.url());
-
-            if (!GOV_PL_PATTERN.matcher(url.getHost()).matches()) {
-                isValid = false;
-                errors.add(new FraudulentTldError());
-            }
-
-            try {
-                InetAddress address = InetAddress.getByName(url.getHost());
-                if (!address.getHostAddress().equals(pageData.serverIp())) {
-                    isValid = false;
-                    errors.add(new MismatchedDnsResolutionError(pageData.serverIp(), address.getHostAddress()));
-                }
-            } catch (Exception e) {
-                isValid = false;
-                errors.add(new DnsResolutionError(e.getMessage()));
-            }
-
-            if (url.getProtocol().equalsIgnoreCase("https")) {
-                try {
-                    HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-                    conn.setRequestMethod("HEAD");
-                    conn.connect();
-                    conn.disconnect();
-                } catch (Exception e) {
-                    isValid = false;
-                    errors.add(new SslError(e.getMessage()));
-                }
-            } else {
-                isValid = false;
-                errors.add(new NoHttpsError());
-            }
-
-        } catch (Exception e) {
-            isValid = false;
-            errors.add(new MalformedUrlError(e.getMessage()));
+            var url = validateUrl(pageData.url());
+            validateTld(url);
+            var ipFromServer = validateDns(url);
+            validateIp(ipFromServer, pageData.serverIp());
+            validateHttps(url);
+            validateSsl(url);
+        } catch (PageValidationError error) {
+            encounteredError = error;
         }
 
         hashRepository.save(HashEntry.builder()
@@ -75,10 +49,56 @@ public class GovValidatorService {
                 .originalUrl(pageData.url())
                 .serverIp(pageData.serverIp())
                 .timestamp(Instant.now())
-                .result(isValid ? CheckResult.VALID : CheckResult.INVALID)
+                .result(encounteredError == null ? CheckResult.VALID : CheckResult.INVALID)
                 .build());
 
         return new CheckResponse(validationId);
+
+    }
+
+    private URL validateUrl(String url) throws MalformedUrlError {
+        try {
+            return new URL(url);
+        } catch (MalformedURLException e) {
+            throw new MalformedUrlError(e.getMessage());
+        }
+    }
+
+    private void validateTld(URL url) throws FraudulentTldError {
+        if (!GOV_PL_PATTERN.matcher(url.getHost()).matches()) {
+            throw new FraudulentTldError();
+        }
+    }
+
+    private void validateHttps(URL url) throws NoHttpsError {
+       if (url.getProtocol().equalsIgnoreCase("https")) {
+           throw new NoHttpsError();
+       }
+    }
+
+    private InetAddress validateDns(URL url) throws DnsResolutionError {
+        try {
+            return InetAddress.getByName(url.getHost());
+        } catch (UnknownHostException e) {
+            throw new DnsResolutionError(e.getMessage());
+        }
+    }
+
+    private void validateIp(InetAddress addressFromServer, String ipFromClient) throws MismatchedDnsResolutionError {
+        if (!addressFromServer.getHostAddress().equals(ipFromClient)) {
+            throw new MismatchedDnsResolutionError(ipFromClient, addressFromServer.getHostAddress());
+        }
+    }
+
+    private void validateSsl(URL url) throws SslError {
+        try {
+            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+            conn.setRequestMethod("HEAD");
+            conn.connect();
+            conn.disconnect();
+        } catch (IOException e) {
+            throw new SslError(e.getMessage());
+        }
     }
 
     public ValidationResult getValidationResult(UUID validationId) {

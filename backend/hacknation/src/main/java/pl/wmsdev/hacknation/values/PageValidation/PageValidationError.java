@@ -1,5 +1,5 @@
 package pl.wmsdev.hacknation.values.PageValidation;
 
-public interface PageValidationError {
-    public String getDescription();
+public abstract class PageValidationError extends Throwable {
+    public abstract String getDescription();
 }
