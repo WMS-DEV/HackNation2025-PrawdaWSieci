@@ -7,9 +7,11 @@ import pl.wmsdev.hacknation.entity.PageData;
 import javax.net.ssl.HttpsURLConnection;
 import java.net.InetAddress;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.security.MessageDigest;
 
 @Service
 public class GovValidatorService {
@@ -59,6 +61,25 @@ public class GovValidatorService {
             reasons.add("Invalid URL: " + e.getMessage());
         }
 
-        return new CheckResponse(isValid, reasons);
+        return new CheckResponse(isValid, reasons, hashPage(pageData));
+    }
+
+    private String hashPage(PageData pageData) {
+        try {
+            var digest = MessageDigest.getInstance("SHA-256");
+            digest.update(pageData.url().getBytes());
+            digest.update(pageData.serverIp().getBytes());
+            digest.update(pageData.url().getBytes());
+            
+            var hashBytes = digest.digest();
+            var sb = new StringBuilder();
+            for (byte b : hashBytes) {
+                sb.append(String.format("%02x", b));
+            }
+            
+            return sb.toString();
+        } catch (NoSuchAlgorithmException ex) {
+            throw new IllegalStateException("SHA-256 not supported");
+        }
     }
 }
