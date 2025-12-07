@@ -1,4 +1,4 @@
-const BACKEND_URL = "https://govguard-internal.wmsdev.pl";
+const BACKEND_URL = "https://wms.artedev.duckdns.org";
 
 const mobileCheck = function () {
     let check = false;

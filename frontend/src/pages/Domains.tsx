@@ -1,19 +1,35 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import BackIcon from "../assets/BackIcon.svg?react";
+import { getDomainList, type DomainItem } from "../api/api";
 
 export default function Domains() {
     const navigate = useNavigate();
 
-    const domains = [
-        "gov.pl",
-        "prawo.gov.pl",
-        "edukacja.gov.pl",
-        "zdrowie.gov.pl",
-        "finanse.gov.pl",
-        "bezpieczenstwo.gov.pl",
-        "transport.gov.pl",
-    ];
+    const [domains, setDomains] = useState<DomainItem[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        let cancelled = false;
+        getDomainList()
+            .then((items) => {
+                if (!cancelled) {
+                    setDomains(items);
+                    setError(null);
+                    setLoading(false);
+                }
+            })
+            .catch(() => {
+                if (!cancelled) {
+                    setError("Nie udało się pobrać domen");
+                    setLoading(false);
+                }
+            });
+        return () => {
+            cancelled = true;
+        };
+    }, []);
 
     const [query, setQuery] = useState("");
 
@@ -22,8 +38,8 @@ export default function Domains() {
         const collator = new Intl.Collator("pl", { sensitivity: "base" });
         const list = !q
             ? domains
-            : domains.filter((d) => d.toLowerCase().includes(q));
-        return [...list].sort((a, b) => collator.compare(a, b));
+            : domains.filter((d) => d.domain.toLowerCase().includes(q));
+        return [...list].sort((a, b) => collator.compare(a.domain, b.domain));
     }, [query, domains]);
 
     return (
@@ -61,22 +77,30 @@ export default function Domains() {
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
                         />
-                        <ul className="max-h-96 overflow-y-auto">
-                            {filteredDomains.length === 0 ? (
-                                <li className="p-3 text-gray-500">
-                                    Brak wyników
-                                </li>
-                            ) : (
-                                filteredDomains.map((domain) => (
-                                    <li
-                                        key={domain}
-                                        className="p-3 border-b border-gray-200 hover:bg-gray-100 cursor-pointer"
-                                    >
-                                        {domain}
+                        {loading ? (
+                            <div className="p-3 text-gray-500">
+                                Ładowanie...
+                            </div>
+                        ) : error ? (
+                            <div className="p-3 text-red-600">{error}</div>
+                        ) : (
+                            <ul className="max-h-96 overflow-y-auto">
+                                {filteredDomains.length === 0 ? (
+                                    <li className="p-3 text-gray-500">
+                                        Brak wyników
                                     </li>
-                                ))
-                            )}
-                        </ul>
+                                ) : (
+                                    filteredDomains.map((item) => (
+                                        <li
+                                            key={item.id ?? item.domain}
+                                            className="p-3 border-b border-gray-200 hover:bg-gray-100 cursor-pointer"
+                                        >
+                                            {item.domain}
+                                        </li>
+                                    ))
+                                )}
+                            </ul>
+                        )}
                     </div>
                 </div>
             </div>

@@ -21,7 +21,7 @@ const dummyServices = [
         icon: <img src="static/icon4.png" className="w-6" alt="mojeIKP" />,
     },
     {
-        text: "Hisotira pojazdu",
+        text: "Historia pojazdu",
         icon: (
             <img
                 src="static/icon5.png"
