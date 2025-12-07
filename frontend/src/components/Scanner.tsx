@@ -41,8 +41,8 @@ const Scanner = () => {
                                 ? "invalid"
                                 : "error";
 
-                        // setStatus(newStatus);
-                        setStatus("invalid")
+                        setStatus(newStatus);
+                        // setStatus("invalid")
                     } catch (e) {
                         console.error("Validation failed", e);
                         setStatus("error");
