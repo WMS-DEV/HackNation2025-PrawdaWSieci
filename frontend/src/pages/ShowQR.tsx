@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import Navigation from "../components/Navigation";
 import { useState, useEffect } from "react";
 import BackIcon from "../assets/BackIcon.svg?react";
 
@@ -70,8 +69,6 @@ export default function ShowQR() {
           </p>
         </div>
       </div>
-
-      <Navigation />
     </div>
   );
 }
