@@ -74,8 +74,6 @@ const Scanner = () => {
     <div className="flex flex-col items-center justify-center p-4 w-full">
       {status === "scanning" || status === "validating" ? (
         <>
-          <h2 className="text-xl font-bold mb-4 text-white">Zeskanuj kod QR</h2>
-
           {errorMsg ? (
             <div className="bg-red-500/10 border border-red-500 text-red-500 p-4 rounded-lg max-w-sm w-full mb-4 text-center">
               <p className="font-bold">Błąd kamery</p>
@@ -92,7 +90,7 @@ const Scanner = () => {
               </button>
             </div>
           ) : (
-            <div className="relative w-full max-w-sm aspect-square overflow-hidden rounded-lg shadow-lg border-2 border-slate-700 bg-black">
+            <div className="relative w-full max-w-sm aspect-square overflow-hidden rounded-lg shadow-lg bg-black">
               <video
                 ref={videoRef}
                 className="w-full h-full object-cover"
@@ -106,10 +104,6 @@ const Scanner = () => {
               )}
             </div>
           )}
-
-          <p className="mt-4 text-gray-400 text-sm text-center">
-            Nakieruj kamerę na kod QR, aby go zweryfikować.
-          </p>
         </>
       ) : (
         <div className="w-full max-w-sm bg-white rounded-2xl p-6 shadow-xl flex flex-col items-center animate-in fade-in zoom-in duration-300">
@@ -171,7 +165,7 @@ const Scanner = () => {
           </button>
           <button
             onClick={() => navigate("/")}
-            className="mt-3 w-full py-3 px-4 bg-transparent border border-gray-300 text-gray-600 font-bold rounded-lg hover:bg-gray-50 transition-colors"
+            className="mt-3 w-full py-3 px-4 bg-transparent text-gray-600 font-bold rounded-lg hover:bg-gray-50 transition-colors"
           >
             Wróć do pulpitu
           </button>

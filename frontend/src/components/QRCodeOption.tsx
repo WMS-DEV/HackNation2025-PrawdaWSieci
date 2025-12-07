@@ -25,9 +25,9 @@ export default function QRCodeOption({ scanOrShow }: QRCodeOptionProps) {
     >
       <div>
         {scanOrShow === "scan" ? (
-          <ScanQRIcon className="w-10" />
+          <ScanQRIcon className="w-6" />
         ) : (
-          <ShowQRIcon className="w-10" />
+          <ShowQRIcon className="w-6" />
         )}
       </div>
       <div className="text-left">
@@ -37,7 +37,7 @@ export default function QRCodeOption({ scanOrShow }: QRCodeOptionProps) {
         <p className="">Zaloguj się lub potwierdź swoje dane</p>
       </div>
       <div>
-        <RightArrowIcon className="w-5" />
+        <RightArrowIcon className="w-2" />
       </div>
     </button>
   );
