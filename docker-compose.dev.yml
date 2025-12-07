@@ -1,16 +1,16 @@
 services:
-#  client:
-#    container_name: client
-#    restart: always
-#    build:
-#      context: ./frontend
-#      dockerfile: Dockerfile
-#    ports:
-#      - "${FRONTEND_PORT}:3000"
-#    develop:
-#      watch:
-#        - action: rebuild
-#          path: ./frontend
+  #  client:
+  #    container_name: client
+  #    restart: always
+  #    build:
+  #      context: ./frontend
+  #      dockerfile: Dockerfile
+  #    ports:
+  #      - "3000:3000"
+  #    develop:
+  #      watch:
+  #        - action: rebuild
+  #          path: ./frontend
 
   service:
     container_name: backend
@@ -19,9 +19,9 @@ services:
       context: ./backend/hacknation
       dockerfile: Dockerfile
     environment:
-        - SERVICE_DB_URL=${SERVICE_DB_URL}
-        - SERVICE_DB_LOGIN=${SERVICE_DB_LOGIN}
-        - SERVICE_DB_PASSWORD=${SERVICE_DB_PASSWORD}
+      - SERVICE_DB_URL=${SERVICE_DB_URL}
+      - SERVICE_DB_LOGIN=${SERVICE_DB_LOGIN}
+      - SERVICE_DB_PASSWORD=${SERVICE_DB_PASSWORD}
     ports:
       - "${SERVICE_PORT}:8080"
     depends_on:
@@ -43,12 +43,11 @@ services:
       - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
-    healthcheck: 
+    healthcheck:
       test: pg_isready -U postgres --dbname=${SERVICE_DB_NAME}
       interval: 5s
       timeout: 5s
       retries: 5
-
 
 volumes:
   postgres-data:

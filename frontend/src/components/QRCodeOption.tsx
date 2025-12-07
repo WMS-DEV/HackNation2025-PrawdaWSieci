@@ -1,0 +1,44 @@
+import { useNavigate } from "react-router-dom";
+import ScanQRIcon from "../assets/ScanQRIcon.svg?react";
+import ShowQRIcon from "../assets/ShowQRIcon.svg?react";
+import RightArrowIcon from "../assets/RightArrowIcon.svg?react";
+
+interface QRCodeOptionProps {
+  scanOrShow: "scan" | "show";
+}
+
+export default function QRCodeOption({ scanOrShow }: QRCodeOptionProps) {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (scanOrShow === "show") {
+      navigate("/show-qr");
+    } else {
+      navigate("/scan-qr");
+    }
+  };
+
+  return (
+    <button
+      onClick={handleClick}
+      className="w-full h-20 rounded-2xl bg-[var(--primary-color)] p-2 transition flex gap-x-2 justify-around items-center shadow-md transition hover:bg-amber-800"
+    >
+      <div>
+        {scanOrShow === "scan" ? (
+          <ScanQRIcon className="w-6" />
+        ) : (
+          <ShowQRIcon className="w-6" />
+        )}
+      </div>
+      <div className="text-left">
+        <p className="font-bold text-xl">
+          {scanOrShow === "scan" ? "Zeskanuj" : "Pokaż"} kod QR
+        </p>
+        <p className="">Zaloguj się lub potwierdź swoje dane</p>
+      </div>
+      <div>
+        <RightArrowIcon className="w-2" />
+      </div>
+    </button>
+  );
+}
