@@ -5,26 +5,22 @@ import Service from "../components/Service";
 const dummyServices = [
     {
         text: "Zastrzeż PESEL",
-        icon: (
-            <img src="static/icon1.png" className="w-6" alt="Zastrzeż PESEL" />
-        ),
+        icon: <img src="/icon1.png" className="w-6" alt="Zastrzeż PESEL" />,
     },
     {
         text: "Domeny gov.pl",
-        icon: (
-            <img src="static/icon2.png" className="w-6" alt="Domeny gov.pl" />
-        ),
+        icon: <img src="/icon2.png" className="w-6" alt="Domeny gov.pl" />,
         url: "/domains",
     },
     {
         text: "Uprawnienia kierowcy",
-        icon: <img src="static/icon4.png" className="w-6" alt="mojeIKP" />,
+        icon: <img src="/icon4.png" className="w-6" alt="mojeIKP" />,
     },
     {
         text: "Historia pojazdu",
         icon: (
             <img
-                src="static/icon5.png"
+                src="/icon5.png"
                 className="w-6"
                 alt="Zgłoś incydent w sieci"
             />
@@ -32,9 +28,7 @@ const dummyServices = [
     },
     {
         text: "Sprawdź dowód",
-        icon: (
-            <img src="static/icon3.png" className="w-6" alt="Sprawdź dowód" />
-        ),
+        icon: <img src="/icon3.png" className="w-6" alt="Sprawdź dowód" />,
     },
 ];
 
