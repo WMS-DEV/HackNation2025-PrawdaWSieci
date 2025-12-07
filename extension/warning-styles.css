@@ -1,0 +1,93 @@
+:root {
+    --color-primary: #0052a5;
+    --color-primary-hover: #006cd7;
+    --color-text-primary: white;
+    --color-text-secondary: black;
+    --color-text-muted: #aaa;
+    --color-error: #d32f2f;
+    --color-border: #888;
+    --color-background: #fefefe;
+    --color-overlay: rgba(0, 0, 0, 0.5);
+    --color-shadow: rgba(0, 0, 0, 0.3);
+}
+
+#ssl-test-warning {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    max-width: 60vw;
+    z-index: 999999;
+    background: var(--color-background);
+    border: 0.2rem solid var(--color-primary);
+    outline: 0.4rem solid var(--color-primary-hover);
+    border-radius: 0.7rem;
+    corner-shape-value: squircle;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    font-family: "Open Sans", sans-serif;
+    font-size: 1rem;
+
+    background-image: url("https://cdn.freebiesupply.com/logos/large/2x/poland-logo-png-transparent.png");
+    background-repeat: no-repeat;
+    background-position: -30% center;
+    background-size: auto 120%;
+    background-blend-mode: soft-light;
+    background-color: #ebebeb;
+
+
+    color: var(--color-primary);
+
+    p {
+        margin-block: 1rem;
+    }
+
+    h3 {
+        color: var(--color-error);
+        margin-top: 0;
+        font-size: 2em;
+        margin-bottom: 0.5rem;
+    }
+
+    img {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        width: 4rem;
+    }
+
+    a {
+        color: var(--color-primary);
+        text-decoration: underline;
+        font-size: 1em;
+    }
+
+    button {
+        text-transform: uppercase;
+        position: absolute;
+        bottom: 0.5rem;
+        right: 0.5rem;
+    }
+
+    p > span {
+        width: 70%;
+    }
+    .grey {
+        color: var(--color-text-muted);
+
+        a {
+            color: var(--color-text-muted);
+        }
+    }
+}
+
+#ssl-test-warning button {
+    background: var(--color-primary);
+    color: var(--color-text-primary);
+    border: none;
+    border-radius: 0.25rem;
+    padding: 0.4375rem 1.75rem;
+    font-weight: bold;
+    cursor: pointer;
+}
