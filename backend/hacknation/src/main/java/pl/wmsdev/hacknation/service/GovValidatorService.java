@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.wmsdev.hacknation.entity.CheckResponse;
 import pl.wmsdev.hacknation.entity.HashEntry;
 import pl.wmsdev.hacknation.entity.PageData;
+import pl.wmsdev.hacknation.repository.DomainRepository;
 import pl.wmsdev.hacknation.repository.HashRepository;
 import pl.wmsdev.hacknation.values.CheckResult;
 import pl.wmsdev.hacknation.values.PageValidation.*;
@@ -24,9 +25,8 @@ import java.util.regex.Pattern;
 @Service
 @RequiredArgsConstructor
 public class GovValidatorService {
-
-    private static final Pattern GOV_PL_PATTERN = Pattern.compile("^(?:[a-zA-Z0-9-]+\\.)*gov\\.pl$");
     private final HashRepository hashRepository;
+    private final DomainRepository domainRepository;
 
     public CheckResponse validatePage(PageData pageData) {
         UUID validationId = UUID.randomUUID();
@@ -63,13 +63,14 @@ public class GovValidatorService {
     }
 
     private void validateTld(URL url) throws FraudulentTldError {
-        if (!GOV_PL_PATTERN.matcher(url.getHost()).matches()) {
+        var host =  url.getHost();
+        if (domainRepository.findByDomain(host).isEmpty()) {
             throw new FraudulentTldError();
         }
     }
 
     private void validateHttps(URL url) throws NoHttpsError {
-       if (url.getProtocol().equalsIgnoreCase("https")) {
+       if (!url.getProtocol().equalsIgnoreCase("https")) {
            throw new NoHttpsError();
        }
     }
