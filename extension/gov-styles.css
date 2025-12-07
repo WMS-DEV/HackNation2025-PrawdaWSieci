@@ -1,35 +1,36 @@
 #qr-certificate-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    height: 2rem;
-    width: auto;
-    z-index: 9999;
-    padding: 0.4375rem 1.75rem;
+    align-items: center;
+
+    animation: qr-btn-collapse 0.5s 1s forwards;
     background-color: var(--color-primary);
-    color: var(--color-text-primary);
     border: none;
     border-radius: 0.25rem;
-    cursor: pointer;
+    bottom: 20px;
     box-shadow: 0 2px 5px var(--color-shadow);
-    text-transform: uppercase;
-    font-size: 1rem;
-    font-weight: bold;
-    font-family: "Open Sans", sans-serif;
-    outline: none;
-    /* Collapse after 5s and remain collapsed */
-    animation: qr-btn-collapse 0.5s 1s forwards;
-    /* Ensure icon centers when collapsed */
+    box-sizing: content-box;
+    color: var(--color-text-primary);
+    cursor: pointer;
+
     display: inline-flex;
     flex-wrap: nowrap;
-    white-space: nowrap;
-    align-items: center;
-    justify-content: start;
-    overflow: hidden;
-    box-sizing: content-box;
+    font-family: "Open Sans", sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
 
-    transition: all 0.3s ease;
+    height: 2rem;
     interpolate-size: allow-keywords;
+    justify-content: start;
+    outline: none;
+    overflow: hidden;
+    
+    padding: 0.4375rem 1.75rem;
+    position: fixed;
+    right: 20px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    width: auto;
+    z-index: 9999;
 }
 
 #qr-certificate-btn img {
@@ -37,7 +38,6 @@
     min-height: 2rem;
 }
 
-/* Hover/focus should uncollapse */
 #qr-certificate-btn:hover,
 #qr-certificate-btn:focus,
 #qr-certificate-modal.visible ~ #qr-certificate-btn {
@@ -48,7 +48,6 @@
     padding: 0.4375rem 1.75rem;
 }
 
-/* Collapsed state keyframes: apply square, icon-only */
 @keyframes qr-btn-collapse {
     to {
         color: transparent;

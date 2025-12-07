@@ -1,4 +1,3 @@
-// Listen for messages from background.js
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === "showSuspiciousNotification") {
         showSuspiciousNotification(request.domain);
@@ -6,15 +5,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 function showSuspiciousNotification(domain) {
-    // Remove existing notification if present
     const existing = document.getElementById("ssl-test-warning");
     if (existing) existing.remove();
 
-    // Create notification container
     const container = document.createElement("div");
     container.id = "ssl-test-warning";
 
-    // Build structured message
     const heading = document.createElement("h3");
     heading.textContent = "Uwaga! Niebezpieczeństwo!";
 
@@ -34,16 +30,36 @@ function showSuspiciousNotification(domain) {
 
     const emblemIcon = document.createElement("img");
     emblemIcon.src = chrome.runtime.getURL('emblem.svg');
+    
+    const stepsTitle = document.createElement("p");
+    stepsTitle.textContent = "Co musisz zrobić:";
+
+    const stepsList = document.createElement("ol");
+    const li1 = document.createElement("li");
+    li1.textContent = "Nie wprowadzaj żadnych danych (login, hasło, PESEL, dane karty).";
+    const li2 = document.createElement("li");
+    li2.textContent = "Natychmiast zamknij tę stronę.";
+    const li3 = document.createElement("li");
+    li3.textContent = "Upewnij się, że adres oficjalnej strony kończy się na .gov.pl.";
+    stepsList.append(li1, li2, li3);
+
+    const reportP = document.createElement("p");
+    reportP.classList = "grey"
+    reportP.append(document.createTextNode("Prosimy o zgłoszenie domey na "));
+    const certLink = document.createElement("a");
+    certLink.href = "https://incydent.cert.pl/domena";
+    certLink.target = "_blank";
+    certLink.rel = "noopener";
+    certLink.textContent = "oficjalnej witrynie CERT dotyczącej oszustw.";
+    reportP.appendChild(certLink);
 
     const messageLine = document.createElement("p");
-    messageLine.append(heading, siteLabel, siteDomain, description, phisingLink, emblemIcon);
+    messageLine.append(heading, siteLabel, siteDomain, description, phisingLink, emblemIcon, stepsTitle, stepsList, reportP);
 
-    // Add dismiss button
     const btn = document.createElement("button");
     btn.textContent = "Przyjąłem";
     btn.onclick = () => container.remove();
 
-    // Append message and button
     container.appendChild(messageLine);
     container.appendChild(btn);
     document.body.appendChild(container);
