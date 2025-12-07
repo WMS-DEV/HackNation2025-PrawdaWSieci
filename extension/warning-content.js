@@ -30,7 +30,7 @@ function showSuspiciousNotification(domain) {
 
     const emblemIcon = document.createElement("img");
     emblemIcon.src = chrome.runtime.getURL('emblem.svg');
-    
+
     const stepsTitle = document.createElement("p");
     stepsTitle.textContent = "Co musisz zrobić:";
 
@@ -50,14 +50,14 @@ function showSuspiciousNotification(domain) {
     certLink.href = "https://incydent.cert.pl/domena";
     certLink.target = "_blank";
     certLink.rel = "noopener";
-    certLink.textContent = "oficjalnej witrynie CERT dotyczącej oszustw.";
+    certLink.textContent = "oficjalnej witrynie CERT dotyczącej oszustw, badź w mObywatelu.";
     reportP.appendChild(certLink);
 
     const messageLine = document.createElement("p");
     messageLine.append(heading, siteLabel, siteDomain, description, phisingLink, emblemIcon, stepsTitle, stepsList, reportP);
 
     const btn = document.createElement("button");
-    btn.textContent = "Przyjąłem";
+    btn.textContent = "OK";
     btn.onclick = () => container.remove();
 
     container.appendChild(messageLine);

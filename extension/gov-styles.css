@@ -22,7 +22,7 @@
     justify-content: start;
     outline: none;
     overflow: hidden;
-    
+
     padding: 0.4375rem 1.75rem;
     position: fixed;
     right: 20px;
@@ -92,7 +92,7 @@
     right: 20px;
     width: 250px;
     transform-origin: bottom right;
-    transform: scaleY(0);
+    transform: translateY(100%);
     will-change: transform;
     transition: transform 0.25s ease;
 
@@ -132,6 +132,10 @@
 
     outline: 1px solid var(--color-grey-30, #a9a9a9);
     border-radius: var(--radius-100, 1rem);
+
+    &:has(.qr-error){
+        outline-color: var(--color-error);
+    }
 }
 
 #qrcode-loading {
@@ -255,10 +259,13 @@
 }
 
 #qr-certificate-modal.visible .qr-content {
-    transform: scaleY(1);
+    transform: translateY(0);
 }
 
 .qr-error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: var(--color-error);
     text-align: center;
     padding: 20px;

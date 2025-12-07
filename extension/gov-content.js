@@ -16,7 +16,6 @@ floatBtn.textContent = "Zweryfikuj witrynę";
 const qrIcon = document.createElement("img");
 qrIcon.src = chrome.runtime.getURL('qrcode.svg');
 floatBtn.prepend(qrIcon);
-document.body.appendChild(floatBtn);
 
 const modal = document.createElement("div");
 modal.id = "qr-certificate-modal";
@@ -42,6 +41,7 @@ elements.loadingDiv.appendChild(createElementWithClass("div", "qr-spinner"));
 Object.values(elements).forEach(el => qrContent.appendChild(el));
 modal.appendChild(qrContent);
 document.body.appendChild(modal);
+document.body.appendChild(floatBtn);
 
 // ============================================================================
 // State Management
@@ -120,32 +120,32 @@ floatBtn.addEventListener("click", async () => {
 
         const serverIp = await chrome.runtime.sendMessage({ action: "getServerIp" });
         console.log(serverIp);
-        displayQRCode("solvro better")
+        // displayQRCode("solvro better")
 
-        // const response = await fetch(`${BACKEND_URL}/api/v1/validation`, {
-        //     method: "POST",
-        //     headers: { "Content-Type": "application/json" },
-        //     body: JSON.stringify({
-        //         url: window.location.hostname,
-        //         serverIp
-        //     })
-        // });
+        const response = await fetch(`${BACKEND_URL}/api/v1/validation`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                url: window.location.hostname,
+                serverIp
+            })
+        });
 
-        
-        
 
-        // if (!response.ok) {
-        //     const errorData = await response.json().catch(() => ({}));
-        //     throw new Error(errorData.message || errorData.error || `HTTP error! status: ${response.status}`);
-        // }
 
-        // if (requestToken !== currentRequestToken) return;
 
-        // const data = await response.json();
-        // displayQRCode(data.validationId);
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || errorData.error || `HTTP error! status: ${response.status}`);
+        }
+
+        if (requestToken !== currentRequestToken) return;
+
+        const data = await response.json();
+        displayQRCode(data.validationId);
     } catch (error) {
         console.log(error);
-        
+
         displayError("Nie udało połączyć się z serwerem weryfikacyjnym.");
     }
 });
