@@ -1,4 +1,4 @@
-const SERVICE_URL = "";
+const SERVICE_URL = "govguard-internal.wmsdev.pl";
 const TARGET_DOMAIN = "gov.pl"
 
 let serverIpCache = {};

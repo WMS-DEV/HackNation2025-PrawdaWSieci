@@ -2,6 +2,8 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
+    height: 2rem;
+    width: auto;
     z-index: 9999;
     padding: 0.4375rem 1.75rem;
     background-color: var(--color-primary);
@@ -15,11 +17,44 @@
     font-weight: bold;
     font-family: "Open Sans", sans-serif;
     outline: none;
+    /* Collapse after 5s and remain collapsed */
+    animation: qr-btn-collapse 0.5s 1s forwards;
+    /* Ensure icon centers when collapsed */
+    display: inline-flex;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    align-items: center;
+    justify-content: start;
+    overflow: hidden;
+    box-sizing: content-box;
+
+    transition: all 0.3s ease;
+    interpolate-size: allow-keywords;
 }
 
 #qr-certificate-btn img {
     vertical-align: top;
-    margin-right: 8px;
+    min-height: 2rem;
+}
+
+/* Hover/focus should uncollapse */
+#qr-certificate-btn:hover,
+#qr-certificate-btn:focus,
+#qr-certificate-modal.visible ~ #qr-certificate-btn {
+    animation: none;
+    transition: all 0.3s ease;
+    width: auto;
+
+    padding: 0.4375rem 1.75rem;
+}
+
+/* Collapsed state keyframes: apply square, icon-only */
+@keyframes qr-btn-collapse {
+    to {
+        color: transparent;
+        padding: 0.4375rem;
+        width: 2rem;
+    }
 }
 
 #qr-certificate-btn:hover {
@@ -58,14 +93,13 @@
     right: 20px;
     width: 250px;
     transform-origin: bottom right;
-    opacity: 0;
     transform: scaleY(0);
-    will-change: transform, opacity;
-    transition: opacity 0.25s ease, transform 0.25s ease;
+    will-change: transform;
+    transition: transform 0.25s ease;
 
     h3 {
-        font-size: 1.5rem;
-        margin-bottom: 0;
+        font-size: 2rem;
+        margin-bottom: 0.1em;
     }
 
     p {
@@ -90,7 +124,8 @@
 #qrcode-display {
     display: flex;
     justify-content: center;
-    width: min-content;
+    width: 200px;
+    aspect-ratio: 1;
     margin: auto;
     margin-block: 1rem;
     padding: 1rem;
@@ -221,7 +256,6 @@
 }
 
 #qr-certificate-modal.visible .qr-content {
-    opacity: 1;
     transform: scaleY(1);
 }
 

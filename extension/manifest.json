@@ -18,6 +18,10 @@
     "web_accessible_resources": [
         {
             "resources": [ "qrcode.svg" ],
+            "matches": [ "*://*.gov.pl/*" ]
+        },
+        {
+            "resources": [ "emblem.svg" ],
             "matches": [ "<all_urls>" ]
         }
     ],

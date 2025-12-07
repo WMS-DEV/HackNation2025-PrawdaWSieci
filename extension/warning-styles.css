@@ -13,28 +13,58 @@
 
 #ssl-test-warning {
     position: fixed;
-    bottom: 24px;
-    right: 24px;
+    bottom: 1rem;
+    right: 1rem;
+    max-width: 60vw;
     z-index: 999999;
     background: var(--color-background);
     border: 2px solid var(--color-error);
-    border-radius: 8px;
+    border-radius: 0.5rem 0 0 0.5rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     padding: 16px 24px;
     display: flex;
     align-items: center;
-    font-family: sans-serif;
+    font-family: "Open Sans", sans-serif;
+    font-size: 1rem;
+
     color: var(--color-primary);
-    font-weight: bold;
-    font-size: 16px;
+
+    p {
+        margin-block: 1rem;
+    }
+
+    h3 {
+        color: var(--color-error);
+        margin-bottom: 0.5rem;
+    }
+
+    img {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        width: 4rem;
+    }
+
+    a {
+        color: var(--color-primary);
+        text-decoration: underline;
+        font-size: 1em;
+    }
+
+    button {
+        text-transform: uppercase;
+        position: absolute;
+        bottom: 0.5rem;
+        right: 0.5rem;
+    }
 }
 
 #ssl-test-warning button {
-    margin-left: 16px;
     background: var(--color-primary);
     color: var(--color-text-primary);
     border: none;
-    border-radius: 4px;
-    padding: 6px 12px;
+    border-radius: 0.25rem;
+    padding: 0.4375rem 1.75rem;
+    font-weight: bold;
     cursor: pointer;
 }
