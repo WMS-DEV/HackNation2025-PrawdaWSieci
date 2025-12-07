@@ -7,7 +7,7 @@ export default function Domains() {
     const navigate = useNavigate();
 
     const [domains, setDomains] = useState<DomainItem[]>([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -76,15 +76,48 @@ export default function Domains() {
                             className="w-full p-3 border border-gray-300 rounded-xl mb-4"
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
+                            disabled={loading}
                         />
                         {loading ? (
-                            <div className="p-3 text-gray-500">
-                                Ładowanie...
+                            <div className="w-full">
+                                <div className="flex items-center gap-2 p-3 text-gray-600">
+                                    <svg
+                                        className="animate-spin h-5 w-5 text-gray-600"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <circle
+                                            className="opacity-25"
+                                            cx="12"
+                                            cy="12"
+                                            r="10"
+                                            stroke="currentColor"
+                                            strokeWidth="4"
+                                        ></circle>
+                                        <path
+                                            className="opacity-75"
+                                            fill="currentColor"
+                                            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                                        ></path>
+                                    </svg>
+                                    <span>Ładowanie listy domen…</span>
+                                </div>
+                                <ul className="h-[60vh] overflow-y-auto">
+                                    {Array.from({ length: 12 }).map((_, i) => (
+                                        <li
+                                            key={i}
+                                            className="p-3 border-b border-gray-200"
+                                        >
+                                            <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
                         ) : error ? (
                             <div className="p-3 text-red-600">{error}</div>
                         ) : (
-                            <ul className="max-h-96 overflow-y-auto">
+                            <ul className="h-[60vh] overflow-y-auto">
                                 {filteredDomains.length === 0 ? (
                                     <li className="p-3 text-gray-500">
                                         Brak wyników

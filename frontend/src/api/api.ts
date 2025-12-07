@@ -2,7 +2,7 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
 export const validateQrCode = async (
     validationId: string
-): Promise<boolean> => {
+): Promise<"valid" | "invalid" | "error"> => {
     try {
         const response = await fetch(
             `${API_URL}/api/v1/validation/${validationId}`,
@@ -14,13 +14,24 @@ export const validateQrCode = async (
             }
         );
 
-        if (response.status === 200) {
-            return true;
+        if (!response.ok) {
+            return "error";
         }
-        return false;
+
+        let data: unknown;
+        try {
+            data = await response.json();
+        } catch {
+            return "error";
+        }
+
+        const result = (data as { result?: string })?.result?.toUpperCase();
+        if (result === "VALID") return "valid";
+        if (result === "INVALID") return "invalid";
+        return "error";
     } catch (error) {
         console.error("Validation error:", error);
-        return false;
+        return "error";
     }
 };
 
@@ -28,7 +39,7 @@ export type DomainItem = { id: number; domain: string };
 
 export const getDomainList = async (): Promise<DomainItem[]> => {
     try {
-        const response = await fetch(`${API_URL}/domains`, {
+        const response = await fetch(`${API_URL}/api/v1/domains`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

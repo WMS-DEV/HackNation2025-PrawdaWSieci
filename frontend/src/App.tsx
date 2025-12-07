@@ -6,6 +6,7 @@ import ShowQR from "./pages/ShowQR";
 import ScanQR from "./pages/ScanQR";
 import Services from "./pages/Services";
 import Domains from "./pages/Domains";
+// import ScanDone from "./pages/ScanDone";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
                   <Route path="/scan-qr" element={<ScanQR />} />
                   <Route path="/services" element={<Services />} />
                   <Route path="/domains" element={<Domains />} />
+                  {/* <Route path="/scan-done" element={<ScanDone />} /> */}
               </Routes>
           </Router>
       </div>
