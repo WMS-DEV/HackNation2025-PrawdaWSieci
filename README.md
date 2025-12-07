@@ -7,6 +7,7 @@ razem z zespołem stworzyliśmy rozwiązanie utrudniające cyberprzestępcom nac
 2. otworzyć link projektu na telefonie: wms-frontend.artedev.duckdns.org (imituje to aplikacje mobilną),
 3. wejść na stronę: www.gov.pl - w celu sprawdzenia jak wygląda UX dla strony z pożądanej domeny .gov.pl
 4. wejść na stronę www.gov.com która w naszym przykładzie imituje stronę z niepoprawną - potencjalnie phishingową.
+5. wejść na stronę dane.gov.pl która w naszym przykładzie nie przechodzi próby walidacji kodem QR
 
 Skład zespołu:
 
